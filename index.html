@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>じゃんけん</title>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet" />
+  <link rel="stylesheet" href="css/janken.css">
+</head>
+
+<body>
+  <main>
+
+    <section class="title-section">
+      <h1>じゃんけん</h1>
+    </section>
+
+    <section class="computer-section" id="computer">
+        <div class="image-container">
+            <!--スタートボタン-->
+            <button class="btn-blue" id="start_btn">start</button>
+            <div id="main">
+                <img src="img/img_rock1.png" alt="グー" class="img_size">
+            </div>
+            <div id="slot">
+                <img src="img/img_scissors1.png" alt="チョキ" class="hidden img_size">
+            </div>
+        </div>
+    </section>
+
+    <section class="result-section" id="result">
+      <p>vs</p>
+    </section>
+
+    <section class="button-section">
+      <img src="img/img_rock1.png" alt="グー" class="choice-button" id="button-r">
+      <img src="img/img_scissors1.png" alt="チョキ" class="choice-button" id="button-s">
+      <img src="img/img_paper1.png" alt="パー" class="choice-button" id="button-p">
+    </section>
+
+    <section class="reset-section">
+        <button class="btn-reset" id="reset_btn">リセット</button>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+      const jan_lists = [
+        { title: "グー", image: "img/img_rock1.png" },
+        { title: "チョキ", image: "img/img_scissors1.png" },
+        { title: "パー", image: "img/img_paper1.png" }
+      ];
+
+      // グローバル変数でカウントを管理
+      let winCount = 0;
+      let loseCount = 0;
+      let drawCount = 0;
+
+      // DOM Elements
+      const start_btn = document.getElementById("start_btn");
+      const reset_btn = document.getElementById("reset_btn");
+      const main = document.getElementById("main");
+      const slot = document.getElementById("slot").firstElementChild;
+      const resultSection = document.getElementById("result");
+      const computerSection = document.getElementById("computer");
+      let timer_id = 0;
+
+      // ランダム画像を表示
+      function randomImg(jan_lists) {
+          const rand = Math.floor(Math.random() * jan_lists.length);
+          slot.setAttribute("src", jan_lists[rand].image);
+      }
+
+      // スタートボタン
+      start_btn.addEventListener("click", function() {
+          console.log("Start button clicked");
+          // スタートボタンを非表示にする
+          start_btn.classList.add("hidden");
+
+          // 画像のスロットを回し始める
+          main.classList.add("hidden");
+          slot.classList.remove("hidden");
+
+          // インターバル開始
+          timer_id = setInterval(() => randomImg(jan_lists), 90);
+      });
+
+      // グー、チョキ、パーの選択結果を表示
+      function showResult(userChoice, comChoice) {
+          const result = (comChoice - userChoice + 3) % 3; // 勝敗判定
+
+          // インターバル停止
+          clearInterval(timer_id);
+
+          // コンピュータとユーザーの画像表示
+          const comImage = jan_lists[comChoice].image;
+          const userImage = jan_lists[userChoice].image;
+          computerSection.innerHTML = `<img src="${comImage}" alt="コンピュータの選択" class="img_size">`;
+          resultSection.innerHTML = `<p>vs</p><img src="${userImage}" alt="あなたの選択" class="img_size">`;
+
+          // 勝敗判定とカウント
+          if (result === 0) {
+              resultSection.innerHTML += "<p>・・draw・・</p>";
+              drawCount++;
+          } else if (result === 1) {
+              resultSection.innerHTML += "<p>you win!!!!</p>";
+              winCount++;
+          } else {
+              resultSection.innerHTML += "<p>you lose・・・</p>";
+              loseCount++;
+          }
+
+          // 勝敗の回数を表示
+          resultSection.innerHTML += `<p>win : ${winCount}回 | lose : ${loseCount}回 | draw : ${drawCount}回</p>`;
+
+          // 結果が表示されたら、スタートボタンを再表示
+          setTimeout(function() {
+            start_btn.classList.remove("hidden");  
+          }, 1000); // 1秒後にスタートボタンを再表示         
+      }
+
+      // グーを選んだ場合
+      $("#button-r").on("click", function() {
+          const com = Math.floor(Math.random() * 3);  // コンピュータの選択
+          const userChoice = 0; // グー
+          showResult(userChoice, com);
+      });
+
+      // チョキを選んだ場合
+      $("#button-s").on("click", function() {
+          const com = Math.floor(Math.random() * 3);  // コンピュータの選択
+          const userChoice = 1; // チョキ
+          showResult(userChoice, com);
+      });
+
+      // パーを選んだ場合
+      $("#button-p").on("click", function() {
+          const com = Math.floor(Math.random() * 3);  // コンピュータの選択
+          const userChoice = 2; // パー
+          showResult(userChoice, com);
+      });
+
+      // リセットボタン
+      reset_btn.addEventListener("click", function() {
+          // 結果と画像を初期化
+          resultSection.innerHTML = "<p>vs</p>"; // 結果セクションをリセット
+          computerSection.innerHTML = `<img src="${jan_lists[0].image}" alt="コンピュータの選択" class="img_size">`;//初期のコンピュータ画像表示（のはず）
+          //resultSection.innerHTML += "<p>win : 0回 | lose : 0回 | draw : 0回</p>"; // 勝敗カウントをリセット
+
+          // スタートボタンを再表示
+          start_btn.classList.remove("hidden");
+
+          // 画像をリセット
+          main.classList.remove("hidden");
+          slot.classList.add("hidden");
+
+          // 勝敗カウントをリセット
+          winCount = 0;
+          loseCount = 0;
+          drawCount = 0;
+      });
+    </script>
+  </main>
+</body>
+</html>

@@ -1,0 +1,116 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.title-section {
+  font-size: 40px;
+  padding-bottom: 50px;
+}
+
+button {
+  width: 200px;
+  height: 70px;
+}
+
+/*ボタンの配置*/
+/* #start_btn {
+  position: absolute;/*画像の上にボタンを配置*/
+  /*top: -40px;/*画像の上部にボタンを配置する*/
+  /*left: 50%;
+  transform: translateX(-50%);/*水平中央に配置*/
+  /*z-index: 10; 画像の上に表示 */
+ /**/
+
+/*画像のコンテナ*/
+.image-container {
+  position: relative; /*親要素を相対位置に設定*/
+  display: inline-block;
+}
+
+/*#start_btn {
+  display: block !important;
+}*/
+
+/*じゃんけん画像（初期状態）*/
+/*#slot img {
+  display: none;/*初期は非表示*/
+/*}*/
+#main img {
+  display: block;/*初期は表示*/
+}
+
+main {
+  max-width: 480px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden { 
+  display: none !important; 
+}
+
+.img_size {
+  width: 200px;
+  height: auto;
+}
+
+.result-images {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vs-text {
+  margin: 0 20px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+/*自分の選択肢*/
+.choice-button {
+  width: 100px;
+  height: 100px;
+  margin: 20px;
+  cursor: pointer;
+}
+
+.choice-button:hover {
+  opacity: 0.8;
+  transform: scale(1.5, 1.5);
+}
+
+/* 結果セクションの設定 */
+.result-section {
+  display: flex;
+  flex-direction: column;  /* 縦方向に配置 */
+  align-items: center;     /* 中央揃え */
+  justify-content: center; /* 中央揃え */
+  text-align: center;      /* テキストの中央揃え */
+  gap: 10px;               /* 要素間の間隔 */
+}
+
+/* 勝敗の結果メッセージ */
+.result-section p {
+  font-size: 2.5rem;
+  margin: 0;  /* デフォルトのマージンをリセット */
+}
+
+/* 自分とコンピュータの選択肢画像 */
+.result-section img {
+  width: 200px;
+  height: 200px;
+  display: block;  /* 画像がブロック要素として表示されるように */
+  margin-bottom: 10px;  /* 画像と結果メッセージの間に少しスペース */
+}
+
+/* 画像とvsの間の隙間 */
+.result-section .vs-text {
+  font-size: 2rem;
+  margin: 10px 0;
+}
